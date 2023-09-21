@@ -1,34 +1,36 @@
 package com.manuelsoft.data
 
-import android.content.Context
 import android.database.sqlite.SQLiteException
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
+import javax.inject.Inject
 
 
 @MediumTest
 @RunWith(AndroidJUnit4::class)
-
+@HiltAndroidTest
 class ProductDaoTest {
 
-    private lateinit var db: RoomDb
+    @get:Rule var hiltRule = HiltAndroidRule(this)
+    @Inject lateinit var db: RoomDb
     private lateinit var productDao: ProductDao
 
     @Before
     fun createDB() {
-        val appContext = ApplicationProvider.getApplicationContext<Context>()
-      //  db = Room.inMemoryDatabaseBuilder(appContext, RoomDb::class.java).build()
-        db = Room.databaseBuilder(appContext, RoomDb::class.java, "ProductsDb").build()
+
+      //  db = Room.databaseBuilder(appContext, RoomDb::class.java, "ProductsDb").build()
+        hiltRule.inject()
         productDao = db.productDao()
 
     }

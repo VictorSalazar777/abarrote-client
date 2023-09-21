@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Abarrote2"
 include(":app")
+include(":data")

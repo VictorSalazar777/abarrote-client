@@ -10,7 +10,7 @@ interface ProductEntityDao {
 
     @Query("SELECT * FROM products")
     @Throws(SQLiteException::class)
-    fun getAll(): List<ProductEntity>?
+    fun getAll(): List<ProductEntity>
 
     @Query("SELECT * FROM products WHERE id=:id")
     @Throws(SQLiteException::class)

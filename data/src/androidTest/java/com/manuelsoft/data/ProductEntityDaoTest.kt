@@ -1,6 +1,5 @@
 package com.manuelsoft.data
 
-import android.database.sqlite.SQLiteException
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -39,20 +38,6 @@ class ProductEntityDaoTest {
     fun closeDb() {
         db.close()
     }
-
-    @Test(expected = SQLiteException::class)
-    fun insert_listOfProductsWithSameId_throwsException() = runBlocking {
-        val prod = ProductEntity(0, "clorox", 6.0f)
-        val prod2 = ProductEntity(0, "clorox", 6.0f)
-        val prod3 = ProductEntity(0, "clorox", 6.0f)
-        val prod4 = ProductEntity(0, "leche", 6.0f)
-
-        val prods = listOf(prod, prod2, prod3, prod4)
-
-        productEntityDao.insert(prods)
-
-    }
-
 
     @Test
     fun insert_listOfProducts_returnsPositive() = runBlocking {

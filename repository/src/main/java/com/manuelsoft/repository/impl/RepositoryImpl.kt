@@ -9,19 +9,31 @@ import javax.inject.Inject
 internal class RepositoryImpl @Inject constructor(private val productEntityDao: ProductEntityDao) : Repository {
 
     private fun productEntityToProduct(productEntity: ProductEntity): Product {
+        return Product(productEntity.id, productEntity.name, productEntity.price)
+    }
 
+    private fun productEntitiesListToProductsList(productEntities: List<ProductEntity>): List<Product> {
+        return productEntities.map { productEntity ->
+            Product(productEntity.id, productEntity.name, productEntity.price)
+        }
     }
 
     private fun productToProductEntity(product: Product): ProductEntity {
+        return ProductEntity(product.id, product.name, product.price)
+    }
 
+    private fun productsListToProductEntitiesList(products: List<Product>): List<ProductEntity> {
+        return products.map { product ->
+            ProductEntity(product.id, product.name, product.price)
+        }
     }
 
     override suspend fun getAll(): List<Product> {
-        TODO("Not yet implemented")
+        return productEntitiesListToProductsList(productEntityDao.getAll())
     }
 
     override suspend fun add(product: Product) {
-        TODO("Not yet implemented")
+        productEntityDao.insert(productToProductEntity(product))
     }
 
 

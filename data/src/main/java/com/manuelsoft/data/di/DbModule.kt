@@ -2,7 +2,7 @@ package com.manuelsoft.data.di
 
 import android.content.Context
 import androidx.room.Room
-import com.manuelsoft.data.ProductDao
+import com.manuelsoft.data.ProductEntityDao
 import com.manuelsoft.data.RoomDb
 import dagger.Module
 import dagger.Provides
@@ -27,7 +27,7 @@ object DbModule {
 
     @Provides
     @Singleton
-    fun provideProductDao(db: RoomDb): ProductDao {
+    fun provideProductDao(db: RoomDb): ProductEntityDao {
         return db.productDao()
     }
 

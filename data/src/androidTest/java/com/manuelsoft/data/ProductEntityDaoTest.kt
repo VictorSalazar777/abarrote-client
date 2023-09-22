@@ -5,7 +5,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.*
@@ -20,18 +19,18 @@ import javax.inject.Inject
 @MediumTest
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-class ProductDaoTest {
+class ProductEntityDaoTest {
 
     @get:Rule var hiltRule = HiltAndroidRule(this)
     @Inject lateinit var db: RoomDb
-    private lateinit var productDao: ProductDao
+    private lateinit var productEntityDao: ProductEntityDao
 
     @Before
     fun createDB() {
 
       //  db = Room.databaseBuilder(appContext, RoomDb::class.java, "ProductsDb").build()
         hiltRule.inject()
-        productDao = db.productDao()
+        productEntityDao = db.productDao()
 
     }
 
@@ -43,60 +42,60 @@ class ProductDaoTest {
 
     @Test(expected = SQLiteException::class)
     fun insert_listOfProductsWithSameId_throwsException() = runBlocking {
-        val prod = Product(0, "clorox", 6.0f)
-        val prod2 = Product(0, "clorox", 6.0f)
-        val prod3 = Product(0, "clorox", 6.0f)
-        val prod4 = Product(0, "leche", 6.0f)
+        val prod = ProductEntity(0, "clorox", 6.0f)
+        val prod2 = ProductEntity(0, "clorox", 6.0f)
+        val prod3 = ProductEntity(0, "clorox", 6.0f)
+        val prod4 = ProductEntity(0, "leche", 6.0f)
 
         val prods = listOf(prod, prod2, prod3, prod4)
 
-        productDao.insert(prods)
+        productEntityDao.insert(prods)
 
     }
 
 
     @Test
     fun insert_listOfProducts_returnsPositive() = runBlocking {
-        val prod = Product(1, "clorox", 6.0f)
-        val prod2 = Product(2, "clorox", 6.0f)
-        val prod3 = Product(3, "clorox", 6.0f)
-        val prod4 = Product(4, "leche", 6.0f)
+        val prod = ProductEntity(1, "clorox", 6.0f)
+        val prod2 = ProductEntity(2, "clorox", 6.0f)
+        val prod3 = ProductEntity(3, "clorox", 6.0f)
+        val prod4 = ProductEntity(4, "leche", 6.0f)
 
         val prods = listOf(prod, prod2, prod3, prod4)
 
-        productDao.insert(prods)
+        productEntityDao.insert(prods)
 
-        val n = productDao.getSize()
+        val n = productEntityDao.getSize()
 
         assertTrue(n > 0 && n == 4)
     }
 
     @Test
     fun getAll_insertingProducts_gettingSameProducts() = runBlocking {
-        val prod = Product(1, "clorox", 6.0f)
-        val prod2 = Product(2, "aceite", 6.0f)
-        val prod3 = Product(3, "leche", 6.0f)
-        productDao.insert(prod)
-        productDao.insert(prod2)
-        productDao.insert(prod3)
+        val prod = ProductEntity(1, "clorox", 6.0f)
+        val prod2 = ProductEntity(2, "aceite", 6.0f)
+        val prod3 = ProductEntity(3, "leche", 6.0f)
+        productEntityDao.insert(prod)
+        productEntityDao.insert(prod2)
+        productEntityDao.insert(prod3)
 
-        val list = productDao.getAll().first()
+        val list = productEntityDao.getAll()
 
         assertTrue(list == listOf(prod, prod2, prod3))
     }
 
     @Test
     fun deleteAll_deletingAllProducts_positiveReturned() = runBlocking {
-        val prod = Product(1, "clorox", 6.0f)
-        val prod2 = Product(2, "clorox", 6.0f)
-        val prod3 = Product(3, "clorox", 6.0f)
-        val prod4 = Product(4, "leche", 6.0f)
+        val prod = ProductEntity(1, "clorox", 6.0f)
+        val prod2 = ProductEntity(2, "clorox", 6.0f)
+        val prod3 = ProductEntity(3, "clorox", 6.0f)
+        val prod4 = ProductEntity(4, "leche", 6.0f)
 
         val prods = listOf(prod, prod2, prod3, prod4)
 
-        productDao.insert(prods)
+        productEntityDao.insert(prods)
 
-        val n = productDao.deleteAll()
+        val n = productEntityDao.deleteAll()
 
         assertTrue(n == 4)
     }

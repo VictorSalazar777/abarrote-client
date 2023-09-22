@@ -4,30 +4,29 @@ import android.database.sqlite.SQLiteException
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface ProductDao {
+interface ProductEntityDao {
 
     @Query("SELECT * FROM products")
     @Throws(SQLiteException::class)
-    fun getAll(): Flow<List<Product>>
+    fun getAll(): List<ProductEntity>?
 
     @Query("SELECT * FROM products WHERE id=:id")
     @Throws(SQLiteException::class)
-    suspend fun getById(id: Int): Product?
+    suspend fun getById(id: Int): ProductEntity?
 
     @Query("SELECT * FROM products WHERE name=:name")
     @Throws(SQLiteException::class)
-    suspend fun getByName(name: String): Product?
+    suspend fun getByName(name: String): ProductEntity?
 
     @Insert
     @Throws(SQLiteException::class)
-    suspend fun insert(product: Product)
+    suspend fun insert(productEntity: ProductEntity)
 
     @Insert
     @Throws(SQLiteException::class)
-    suspend fun insert(products: List<Product>)
+    suspend fun insert(productEntities: List<ProductEntity>)
 
     @Query("DELETE FROM products")
     @Throws(SQLiteException::class)

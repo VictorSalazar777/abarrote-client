@@ -1,5 +1,6 @@
 package com.manuelsoft.repository.impl
 
+import android.database.sqlite.SQLiteException
 import com.manuelsoft.data.ProductEntity
 import com.manuelsoft.data.ProductEntityDao
 import com.manuelsoft.repository.Product
@@ -29,11 +30,57 @@ internal class RepositoryImpl @Inject constructor(private val productEntityDao: 
     }
 
     override suspend fun getAll(): List<Product> {
-        return productEntitiesListToProductsList(productEntityDao.getAll())
+        try {
+            return productEntitiesListToProductsList(productEntityDao.getAll())
+        } catch (e: SQLiteException) {
+            throw RuntimeException(e)
+        }
+    }
+
+    override suspend fun getById(id: Int): Product? {
+        try {
+            val productEntity = productEntityDao.getById(id)
+            if (productEntity == null) {
+                return null
+            } else {
+                return productEntityToProduct(productEntity)
+            }
+        } catch (e: SQLiteException) {
+            throw RuntimeException(e)
+        }
     }
 
     override suspend fun add(product: Product) {
-        productEntityDao.insert(productToProductEntity(product))
+        try {
+            productEntityDao.insert(productToProductEntity(product))
+        } catch (e: SQLiteException) {
+            throw RuntimeException(e)
+        }
+    }
+
+    override suspend fun addList(products: List<Product>) {
+        try {
+            productEntityDao.insert(productsListToProductEntitiesList(products))
+        } catch (e: SQLiteException) {
+            throw RuntimeException(e)
+        }
+    }
+
+    override suspend fun deleteById(id: Int) {
+        try {
+            productEntityDao.deleteById(id)
+        } catch (e: SQLiteException) {
+            throw RuntimeException(e)
+        }
+    }
+
+    override suspend fun getSize(): Int {
+        try {
+            return productEntityDao.getSize()
+        } catch (e: SQLiteException) {
+            throw RuntimeException(e)
+        }
+
     }
 
 

@@ -80,10 +80,11 @@ class ProductEntityDaoTest {
 
         productEntityDao.insert(prods)
 
-        val n = productEntityDao.deleteAll()
+        productEntityDao.deleteAll()
 
-        assertTrue(n == 4)
+        assertTrue(productEntityDao.getSize() == 0)
     }
+
 
 
 }

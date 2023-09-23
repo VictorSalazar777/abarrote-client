@@ -14,6 +14,8 @@ interface Repository {
 
     suspend fun deleteById(id: Int)
 
+    suspend fun deleteAll()
+
     suspend fun getSize(): Int
 
 }

@@ -12,7 +12,7 @@ android {
     defaultConfig {
         minSdk = 19
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.manuelsoft.repository.runner.CustomTestRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -46,4 +46,7 @@ dependencies {
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.48")
 }

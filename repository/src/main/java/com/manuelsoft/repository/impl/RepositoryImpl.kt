@@ -74,6 +74,14 @@ internal class RepositoryImpl @Inject constructor(private val productEntityDao: 
         }
     }
 
+    override suspend fun deleteAll() {
+        try {
+            productEntityDao.deleteAll()
+        } catch (e: SQLiteException) {
+            throw RuntimeException(e)
+        }
+    }
+
     override suspend fun getSize(): Int {
         try {
             return productEntityDao.getSize()

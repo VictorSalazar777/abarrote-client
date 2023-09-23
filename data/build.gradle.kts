@@ -46,10 +46,9 @@ android {
 dependencies {
 
     val room_version = "2.5.2"
-    implementation("androidx.room:room-runtime:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-    implementation("com.google.dagger:hilt-android:2.48")
+    api("androidx.room:room-ktx:$room_version")
+    api("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-compiler:2.48")
 
     testImplementation("junit:junit:4.13.2")

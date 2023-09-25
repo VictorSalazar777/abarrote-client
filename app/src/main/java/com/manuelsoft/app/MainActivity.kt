@@ -1,71 +1,47 @@
 package com.manuelsoft.app
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.widget.ArrayAdapter
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.manuelsoft.app.databinding.MainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity: AppCompatActivity() {
 
     private lateinit var binding: MainBinding
-    private lateinit var listAdapter: ArrayAdapter<String>
-    private val productsViewModel: ProductsViewModel by viewModels()
+    private lateinit var navController: NavController
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = MainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupProductsList()
-        setupSearchBar()
-        productsViewModel.getAllProducts()
+        setSupportActionBar(binding.toolbar)
+        setupActionBarNavigation()
+
     }
 
-    private fun setupProductsList() {
-        val products = mutableListOf<String>()
-        listAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, products)
-        binding.productsList.adapter = listAdapter
-        observeProductListSource()
+    private fun setupActionBarNavigation() {
+        navController = (supportFragmentManager.findFragmentById(R.id.fragment_container)
+                as NavHostFragment).navController
+        val appBarConfiguration = AppBarConfiguration(
+            navController.graph,
+            fallbackOnNavigateUpListener = ::onSupportNavigateUp
+        )
+
+        setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
-    private fun observeProductListSource() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                productsViewModel.productsFlow.collectLatest { productList ->
-                    listAdapter.clear()
-                    listAdapter.addAll(productList.map { product ->
-                        product.name
-                    })
-                }
-            }
-        }
+    override fun onSupportNavigateUp(): Boolean {
+        // Allows NavigationUI to support proper up navigation or the drawer layout
+        // drawer menu, depending on the situation
+        return findNavController(R.id.fragment_container).navigateUp()
     }
 
-
-    private fun setupSearchBar() {
-        binding.etSearchbar.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                listAdapter.filter.filter(s);
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                //
-            }
-
-        })
-    }
 
 }

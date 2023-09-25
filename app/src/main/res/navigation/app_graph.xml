@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_graph"
+    app:startDestination="@id/searchProductsFragment">
+
+    <fragment
+        android:id="@+id/searchProductsFragment"
+        android:name="com.manuelsoft.app.SearchProductsFragment"
+        android:label="SearchProductsFragment"
+        tools:layout="@layout/search_products">
+
+        <action
+            android:id="@+id/action_searchProductsFragment_to_crudProductsFragment"
+            app:destination="@id/crudProductsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/crudProductsFragment"
+        android:name="com.manuelsoft.app.CrudProductsFragment"
+        android:label="CrudProductsFragment"
+        tools:layout="@layout/crud_products">
+
+    </fragment>
+
+</navigation>

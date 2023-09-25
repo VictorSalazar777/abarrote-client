@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class ProductsViewModel @Inject constructor(private val repository: Repository): ViewModel() {
+class SearchProductsViewModel @Inject constructor(private val repository: Repository): ViewModel() {
 
 
     private val _productsFlow = MutableStateFlow<List<Product>>(mutableListOf())
@@ -21,12 +21,12 @@ class ProductsViewModel @Inject constructor(private val repository: Repository):
     fun getAllProducts() {
         viewModelScope.launch {
 
-            val prod = Product(0, "aceite", 6.0f)
-            val prod2 = Product(0, "arroz", 7.0f)
-            val prod3 = Product(0, "lejia", 4.0f)
-            val prod4 = Product(0, "leche", 5.0f)
-            val prods = listOf(prod, prod2, prod3, prod4)
-            repository.addList(prods)
+//            val prod = Product(0, "aceite", 6.0f)
+//            val prod2 = Product(0, "arroz", 7.0f)
+//            val prod3 = Product(0, "lejia", 4.0f)
+//            val prod4 = Product(0, "leche", 5.0f)
+//            val prods = listOf(prod, prod2, prod3, prod4)
+//            repository.addList(prods)
 
             _productsFlow.value = repository.getAll()
         }

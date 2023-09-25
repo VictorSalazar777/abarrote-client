@@ -12,7 +12,7 @@
         android:textSize="30sp" />
 
     <EditText
-        android:id="@+id/et_editproductname"
+        android:id="@+id/et_productname"
         android:layout_margin="5dp"
         android:paddingEnd="20dp"
         android:paddingStart="20dp"
@@ -23,7 +23,8 @@
         android:background="@drawable/productbar_background" />
 
     <EditText
-        android:id="@+id/et_editproductprice"
+        android:id="@+id/et_productprice"
+        android:inputType="number|numberDecimal"
         android:layout_margin="5dp"
         android:paddingEnd="20dp"
         android:paddingStart="20dp"
@@ -33,10 +34,9 @@
         android:hint="Precio de producto"
         android:background="@drawable/productbar_background" />
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/products_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

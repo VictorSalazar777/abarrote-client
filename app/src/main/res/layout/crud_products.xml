@@ -34,6 +34,15 @@
         android:hint="Precio de producto"
         android:background="@drawable/productbar_background" />
 
+    <Button
+        android:id="@+id/btn_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Agregar"
+        android:layout_margin="15dp"
+        android:layout_gravity="end"
+        android:enabled="false" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/products_list"
         android:layout_width="match_parent"

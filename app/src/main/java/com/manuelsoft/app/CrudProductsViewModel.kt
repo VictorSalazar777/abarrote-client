@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CrudProductsViewModel @Inject constructor(private val repository: Repository): ViewModel() {
+class CrudProductsViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     private val _productsFlow = MutableStateFlow<List<Product>>(mutableListOf())
     val productsFlow = _productsFlow.asStateFlow()
@@ -19,6 +19,23 @@ class CrudProductsViewModel @Inject constructor(private val repository: Reposito
     fun getAllProducts() {
         viewModelScope.launch {
             _productsFlow.value = repository.getAll()
+        }
+    }
+
+
+    fun addProduct(product: Product) {
+        viewModelScope.launch {
+            repository.add(product)
+        }
+    }
+
+    fun updateProduct(product: Product) {
+
+    }
+
+    fun deleteProduct(product: Product) {
+        viewModelScope.launch {
+            repository.deleteById(product.id)
         }
     }
 

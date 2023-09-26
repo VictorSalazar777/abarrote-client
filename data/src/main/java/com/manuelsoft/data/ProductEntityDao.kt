@@ -4,12 +4,13 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProductEntityDao {
 
     @Query("SELECT * FROM products")
-    suspend fun getAll(): List<ProductEntity>
+    fun getAll(): Flow<List<ProductEntity>>
 
     @Query("SELECT * FROM products WHERE id=:id")
     suspend fun getById(id: Int): ProductEntity?

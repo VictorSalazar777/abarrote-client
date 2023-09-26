@@ -5,21 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.manuelsoft.repository.Product
 import com.manuelsoft.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CrudProductsViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
-    private val _productsFlow = MutableStateFlow<List<Product>>(mutableListOf())
-    val productsFlow = _productsFlow.asStateFlow()
-
-    fun getAllProducts() {
-        viewModelScope.launch {
-            _productsFlow.value = repository.getAll()
-        }
+    fun productListFlow(): Flow<List<Product>> {
+        return repository.getAll()
     }
 
 
@@ -30,6 +24,7 @@ class CrudProductsViewModel @Inject constructor(private val repository: Reposito
     }
 
     fun updateProduct(product: Product) {
+
 
     }
 

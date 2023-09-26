@@ -5,9 +5,12 @@ import com.manuelsoft.data.ProductEntity
 import com.manuelsoft.data.ProductEntityDao
 import com.manuelsoft.repository.Product
 import com.manuelsoft.repository.Repository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-internal class RepositoryImpl @Inject constructor(private val productEntityDao: ProductEntityDao) : Repository {
+internal class RepositoryImpl @Inject constructor(private val productEntityDao: ProductEntityDao) :
+    Repository {
 
     private fun productEntityToProduct(productEntity: ProductEntity): Product {
         return Product(productEntity.id, productEntity.name, productEntity.price)
@@ -29,9 +32,11 @@ internal class RepositoryImpl @Inject constructor(private val productEntityDao: 
         }
     }
 
-    override suspend fun getAll(): List<Product> {
+    override fun getAll(): Flow<List<Product>> {
         try {
-            return productEntitiesListToProductsList(productEntityDao.getAll())
+            return productEntityDao.getAll().map { productEntitiesList ->
+                productEntitiesListToProductsList(productEntitiesList)
+            }
         } catch (e: SQLiteException) {
             throw RuntimeException(e)
         }

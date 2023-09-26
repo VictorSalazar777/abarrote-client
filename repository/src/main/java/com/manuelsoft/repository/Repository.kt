@@ -1,10 +1,11 @@
 package com.manuelsoft.repository
 
+import kotlinx.coroutines.flow.Flow
 
 
 interface Repository {
 
-    suspend fun getAll(): List<Product>
+    fun getAll(): Flow<List<Product>>
 
     suspend fun getById(id: Int): Product?
 

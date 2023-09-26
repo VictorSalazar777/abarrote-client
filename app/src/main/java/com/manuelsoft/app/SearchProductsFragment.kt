@@ -39,7 +39,6 @@ class SearchProductsFragment() :
         super.onCreate(savedInstanceState)
         val products = mutableListOf<String>()
         listAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, products)
-        listAdapter.setNotifyOnChange(true)
 
     }
 
@@ -51,8 +50,8 @@ class SearchProductsFragment() :
     private fun observeProductListSource() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                searchProductsViewModel.productsFlow.collectLatest { productList ->
-                    //listAdapter.clear()
+                searchProductsViewModel.productListFLow().collectLatest { productList ->
+                    listAdapter.clear()
                     listAdapter.addAll(productList.map { product ->
                         product.name
                     })
@@ -86,7 +85,7 @@ class SearchProductsFragment() :
         setMenu()
         setupProductsList()
         setupSearchBar()
-        searchProductsViewModel.getAllProducts()
+        searchProductsViewModel.productListFLow()
     }
 
     private fun setMenu() {

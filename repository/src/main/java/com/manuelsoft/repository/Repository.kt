@@ -9,13 +9,13 @@ interface Repository {
 
     suspend fun getById(id: Int): Product?
 
-    suspend fun add(product: Product)
+    suspend fun add(product: Product): Long
 
-    suspend fun addList(products: List<Product>)
+    suspend fun addList(products: List<Product>): LongArray
 
-    suspend fun deleteById(id: Int)
+    suspend fun deleteById(id: Int): Int
 
-    suspend fun deleteAll()
+    suspend fun deleteAll(): Int
 
     suspend fun getSize(): Int
 

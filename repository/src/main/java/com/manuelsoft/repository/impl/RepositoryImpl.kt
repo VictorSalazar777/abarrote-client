@@ -55,33 +55,33 @@ internal class RepositoryImpl @Inject constructor(private val productEntityDao: 
         }
     }
 
-    override suspend fun add(product: Product) {
+    override suspend fun add(product: Product): Long {
         try {
-            productEntityDao.insert(productToProductEntity(product))
+            return productEntityDao.insert(productToProductEntity(product))
         } catch (e: SQLiteException) {
             throw RuntimeException(e)
         }
     }
 
-    override suspend fun addList(products: List<Product>) {
+    override suspend fun addList(products: List<Product>): LongArray {
         try {
-            productEntityDao.insert(productsListToProductEntitiesList(products))
+            return productEntityDao.insert(productsListToProductEntitiesList(products))
         } catch (e: SQLiteException) {
             throw RuntimeException(e)
         }
     }
 
-    override suspend fun deleteById(id: Int) {
+    override suspend fun deleteById(id: Int): Int {
         try {
-            productEntityDao.deleteById(id)
+            return productEntityDao.deleteById(id)
         } catch (e: SQLiteException) {
             throw RuntimeException(e)
         }
     }
 
-    override suspend fun deleteAll() {
+    override suspend fun deleteAll(): Int {
         try {
-            productEntityDao.deleteAll()
+            return productEntityDao.deleteAll()
         } catch (e: SQLiteException) {
             throw RuntimeException(e)
         }

@@ -21,7 +21,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CrudProductsFragment : BaseFragment<CrudProductsBinding>() {
+class CrudProductsFragment : BaseFragment<CrudProductsBinding>(), BtnUpdateClickInterface,
+    BtnDeleteClickInterface {
 
     override val inflate: (LayoutInflater, ViewGroup?, Boolean) -> CrudProductsBinding
         get() = CrudProductsBinding::inflate
@@ -29,12 +30,13 @@ class CrudProductsFragment : BaseFragment<CrudProductsBinding>() {
     private val crudProductsViewModel: CrudProductsViewModel by viewModels()
 
     private lateinit var adapter: ProductsRecyclerViewAdapter
+    private var etProductNameCurrentText: CharSequence? = null
     private var priceOk = false
     private var nameOk = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = ProductsRecyclerViewAdapter()
+        adapter = ProductsRecyclerViewAdapter(this, this)
 
     }
 
@@ -55,6 +57,26 @@ class CrudProductsFragment : BaseFragment<CrudProductsBinding>() {
         }
     }
 
+    private fun observeDeleteResultFlow() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                crudProductsViewModel.deleteFlowResult.collectLatest {
+                    if (it == 1) {
+                        Toast.makeText(requireContext(), "Producto eliminado", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "Ocurrió un problema y no se pudo eliminar",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+
+    }
+
     private fun setupProductNameBarEditText() {
         binding.etProductname.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -62,6 +84,7 @@ class CrudProductsFragment : BaseFragment<CrudProductsBinding>() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                etProductNameCurrentText = s
                 adapter.filter.filter(s)
                 verifyProductName(s)
                 binding.btnAdd.isEnabled = nameOk && priceOk
@@ -106,6 +129,7 @@ class CrudProductsFragment : BaseFragment<CrudProductsBinding>() {
         priceOk = price.toString().toDoubleOrNull() != null
     }
 
+
     private fun setupAddButton() {
         binding.btnAdd.setOnClickListener { it ->
             crudProductsViewModel.addProduct(
@@ -124,7 +148,6 @@ class CrudProductsFragment : BaseFragment<CrudProductsBinding>() {
         }
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupProductsList()
@@ -132,6 +155,18 @@ class CrudProductsFragment : BaseFragment<CrudProductsBinding>() {
         setupProductPriceEditText()
         setupAddButton()
         crudProductsViewModel.productListFlow()
+        observeDeleteResultFlow()
     }
+
+    override fun onUpdateClick(view: View, product: Product) {
+        crudProductsViewModel.updateProduct(product)
+    }
+
+    override fun onDeleteClick(view: View, product: Product) {
+        crudProductsViewModel.deleteProduct(product)
+        binding.etProductname.text.clear()
+        binding.etProductprice.text.clear()
+    }
+
 
 }

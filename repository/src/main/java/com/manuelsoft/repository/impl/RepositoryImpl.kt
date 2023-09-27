@@ -1,6 +1,5 @@
 package com.manuelsoft.repository.impl
 
-import android.database.sqlite.SQLiteException
 import com.manuelsoft.data.ProductEntity
 import com.manuelsoft.data.ProductEntityDao
 import com.manuelsoft.repository.Product
@@ -33,67 +32,52 @@ internal class RepositoryImpl @Inject constructor(private val productEntityDao: 
     }
 
     override fun getAll(): Flow<List<Product>> {
-        try {
-            return productEntityDao.getAll().map { productEntitiesList ->
-                productEntitiesListToProductsList(productEntitiesList)
-            }
-        } catch (e: SQLiteException) {
-            throw RuntimeException(e)
+
+        return productEntityDao.getAll().map { productEntitiesList ->
+            productEntitiesListToProductsList(productEntitiesList)
         }
     }
 
     override suspend fun getById(id: Int): Product? {
-        try {
-            val productEntity = productEntityDao.getById(id)
-            if (productEntity == null) {
-                return null
-            } else {
-                return productEntityToProduct(productEntity)
-            }
-        } catch (e: SQLiteException) {
-            throw RuntimeException(e)
+
+        val productEntity = productEntityDao.getById(id)
+        if (productEntity == null) {
+            return null
+        } else {
+            return productEntityToProduct(productEntity)
         }
     }
 
     override suspend fun add(product: Product): Long {
-        try {
-            return productEntityDao.insert(productToProductEntity(product))
-        } catch (e: SQLiteException) {
-            throw RuntimeException(e)
-        }
+        return productEntityDao.insert(productToProductEntity(product))
     }
 
     override suspend fun addList(products: List<Product>): LongArray {
-        try {
-            return productEntityDao.insert(productsListToProductEntitiesList(products))
-        } catch (e: SQLiteException) {
-            throw RuntimeException(e)
-        }
+        return productEntityDao.insert(productsListToProductEntitiesList(products))
+    }
+
+    override suspend fun updateName(id: Int, name: String): Int {
+        return productEntityDao.updateName(id, name)
+    }
+
+    override suspend fun updatePrice(id: Int, price: Float): Int {
+        return productEntityDao.updatePrice(id, price)
+    }
+
+    override suspend fun updateProduct(product: Product): Int {
+        return productEntityDao.updateProduct(productToProductEntity(product))
     }
 
     override suspend fun deleteById(id: Int): Int {
-        try {
-            return productEntityDao.deleteById(id)
-        } catch (e: SQLiteException) {
-            throw RuntimeException(e)
-        }
+        return productEntityDao.deleteById(id)
     }
 
     override suspend fun deleteAll(): Int {
-        try {
-            return productEntityDao.deleteAll()
-        } catch (e: SQLiteException) {
-            throw RuntimeException(e)
-        }
+        return productEntityDao.deleteAll()
     }
 
     override suspend fun getSize(): Int {
-        try {
-            return productEntityDao.getSize()
-        } catch (e: SQLiteException) {
-            throw RuntimeException(e)
-        }
-
+        return productEntityDao.getSize()
     }
 
 

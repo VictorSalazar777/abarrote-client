@@ -57,19 +57,21 @@ class CrudProductsFragment : BaseFragment<CrudProductsBinding>(), BtnUpdateClick
         }
     }
 
-    private fun observeDeleteResultFlow() {
+    private fun observeResultFlow() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                crudProductsViewModel.deleteFlowResult.collectLatest {
-                    if (it == 1) {
-                        Toast.makeText(requireContext(), "Producto eliminado", Toast.LENGTH_SHORT)
+                crudProductsViewModel.resultFlow.collectLatest {
+
+                    if (it.isSuccess) {
+                        val value = it.getOrNull()
+                        Toast.makeText(requireContext(), value, Toast.LENGTH_SHORT)
                             .show()
                     } else {
-                        Toast.makeText(
-                            requireContext(),
-                            "Ocurrió un problema y no se pudo eliminar",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        val value = it.exceptionOrNull()
+                        if (value != null) {
+                            Toast.makeText(requireContext(), value.message, Toast.LENGTH_SHORT)
+                                .show()
+                        }
                     }
                 }
             }
@@ -155,7 +157,7 @@ class CrudProductsFragment : BaseFragment<CrudProductsBinding>(), BtnUpdateClick
         setupProductPriceEditText()
         setupAddButton()
         crudProductsViewModel.productListFlow()
-        observeDeleteResultFlow()
+        observeResultFlow()
     }
 
     override fun onUpdateClick(view: View, product: Product) {

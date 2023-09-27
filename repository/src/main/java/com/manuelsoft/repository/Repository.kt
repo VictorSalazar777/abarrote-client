@@ -13,6 +13,12 @@ interface Repository {
 
     suspend fun addList(products: List<Product>): LongArray
 
+    suspend fun updateName(id: Int, name: String): Int
+
+    suspend fun updatePrice(id: Int, price: Float): Int
+
+    suspend fun updateProduct(product: Product): Int
+
     suspend fun deleteById(id: Int): Int
 
     suspend fun deleteAll(): Int

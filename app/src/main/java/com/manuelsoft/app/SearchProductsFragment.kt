@@ -31,7 +31,7 @@ class SearchProductsFragment() :
         get() = SearchProductsBinding::inflate
 
 
-    private val searchProductsViewModel: SearchProductsViewModel by activityViewModels()
+    private val crudProductsViewModel: CrudProductsViewModel by activityViewModels()
 
     private lateinit var listAdapter: ArrayAdapter<String>
 
@@ -50,7 +50,7 @@ class SearchProductsFragment() :
     private fun observeProductListSource() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                searchProductsViewModel.productListFLow().collectLatest { productList ->
+                crudProductsViewModel.productListFlow().collectLatest { productList ->
                     listAdapter.clear()
                     listAdapter.addAll(productList.map { product ->
                         product.name
@@ -85,7 +85,7 @@ class SearchProductsFragment() :
         setMenu()
         setupProductsList()
         setupSearchBar()
-        searchProductsViewModel.productListFLow()
+        crudProductsViewModel.productListFlow()
     }
 
     private fun setMenu() {

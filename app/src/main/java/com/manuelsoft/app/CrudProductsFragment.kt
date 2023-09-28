@@ -8,10 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.viewModels
+import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.manuelsoft.app.databinding.CrudProductsBinding
@@ -27,7 +29,7 @@ class CrudProductsFragment : BaseFragment<CrudProductsBinding>(), BtnUpdateClick
     override val inflate: (LayoutInflater, ViewGroup?, Boolean) -> CrudProductsBinding
         get() = CrudProductsBinding::inflate
 
-    private val crudProductsViewModel: CrudProductsViewModel by viewModels()
+    private val crudProductsViewModel: CrudProductsViewModel by activityViewModels()
 
     private lateinit var adapter: ProductsRecyclerViewAdapter
     private var etProductNameCurrentText: CharSequence? = null
@@ -161,7 +163,17 @@ class CrudProductsFragment : BaseFragment<CrudProductsBinding>(), BtnUpdateClick
     }
 
     override fun onUpdateClick(view: View, product: Product) {
-        crudProductsViewModel.updateProduct(product)
+
+        val bundle = bundleOf(
+            "id" to product.id,
+            "name" to product.name,
+            "price" to product.price
+        )
+
+        findNavController().navigate(
+            R.id.action_crudProductsFragment_to_updateDialogFragment,
+            bundle
+        )
     }
 
     override fun onDeleteClick(view: View, product: Product) {

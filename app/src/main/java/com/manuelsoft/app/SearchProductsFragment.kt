@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -31,7 +31,7 @@ class SearchProductsFragment() :
         get() = SearchProductsBinding::inflate
 
 
-    private val searchProductsViewModel: SearchProductsViewModel by viewModels()
+    private val searchProductsViewModel: SearchProductsViewModel by activityViewModels()
 
     private lateinit var listAdapter: ArrayAdapter<String>
 

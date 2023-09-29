@@ -63,7 +63,8 @@ class ProductsRecyclerViewAdapter(
                     productList
                 } else {
                     productList.filter { product ->
-                        product.name.startsWith(constraintString)
+                        // product.name.startsWith(constraintString)
+                        product.name.contains(constraintString, ignoreCase = true)
                     }
                 }
 

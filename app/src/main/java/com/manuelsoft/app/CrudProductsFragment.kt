@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -50,7 +52,7 @@ class CrudProductsFragment : BaseFragment<CrudProductsBinding>(), BtnUpdateClick
     }
 
     private fun observeProductListSource() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 crudProductsViewModel.productListFlow().collectLatest { productList ->
                     adapter.setData(productList)
@@ -60,7 +62,7 @@ class CrudProductsFragment : BaseFragment<CrudProductsBinding>(), BtnUpdateClick
     }
 
     private fun observeResultFlow() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 crudProductsViewModel.resultFlow.collectLatest {
 
@@ -107,26 +109,37 @@ class CrudProductsFragment : BaseFragment<CrudProductsBinding>(), BtnUpdateClick
 
     private fun setupProductPriceEditText() {
         binding.etProductprice.filters = arrayOf<InputFilter>(MoneyValueFilter())
-        binding.etProductprice.addTextChangedListener(
-            object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?, start: Int, count: Int, after: Int
-                ) {
-                    //
-                }
 
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    verifyProductPrice(s)
-                    binding.btnAdd.isEnabled = nameOk && priceOk
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    //
-                }
-
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?, start: Int, count: Int, after: Int
+            ) {
+                //
             }
 
-        )
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                verifyProductPrice(s)
+                binding.btnAdd.isEnabled = nameOk && priceOk
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                //
+            }
+
+        }
+
+        val lifecycleObserver = object : DefaultLifecycleObserver {
+            override fun onResume(owner: LifecycleOwner) {
+                super.onResume(owner)
+                binding.etProductprice.addTextChangedListener(textWatcher)
+            }
+
+            override fun onPause(owner: LifecycleOwner) {
+                super.onPause(owner)
+                binding.etProductprice.removeTextChangedListener(textWatcher)
+            }
+        }
+        viewLifecycleOwner.lifecycle.addObserver(lifecycleObserver)
     }
 
     private fun verifyProductPrice(price: CharSequence?) {

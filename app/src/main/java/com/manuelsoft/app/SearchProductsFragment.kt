@@ -13,7 +13,9 @@ import android.widget.ArrayAdapter
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -48,7 +50,7 @@ class SearchProductsFragment() :
     }
 
     private fun observeProductListSource() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 crudProductsViewModel.productListFlow().collectLatest { productList ->
                     listAdapter.clear()
@@ -62,7 +64,7 @@ class SearchProductsFragment() :
 
 
     private fun setupSearchBar() {
-        binding.etSearchbar.addTextChangedListener(object : TextWatcher {
+        val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //
             }
@@ -75,7 +77,21 @@ class SearchProductsFragment() :
                 //
             }
 
-        })
+        }
+
+        val lifecycleObserver = object : DefaultLifecycleObserver {
+            override fun onResume(owner: LifecycleOwner) {
+                super.onResume(owner)
+                binding.etSearchbar.addTextChangedListener(textWatcher)
+            }
+
+            override fun onPause(owner: LifecycleOwner) {
+                super.onPause(owner)
+                binding.etSearchbar.removeTextChangedListener(textWatcher)
+            }
+        }
+
+        viewLifecycleOwner.lifecycle.addObserver(lifecycleObserver)
     }
 
 

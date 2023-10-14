@@ -6,30 +6,23 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.manuelsoft.app.databinding.ProductItemBinding
+import com.manuelsoft.app.databinding.ProductItemSearchBinding
 import com.manuelsoft.repository.Product
 
-class ProductsRecyclerViewAdapter(
-    private val btnUpdateClick: BtnUpdateClickInterface,
-    private val btnDeleteClick: BtnDeleteClickInterface
-) :
-    RecyclerView.Adapter<ProductsRecyclerViewAdapter.MyViewHolder>(), Filterable {
+class SearchProductsRecyclerViewAdapter :
+    RecyclerView.Adapter<SearchProductsRecyclerViewAdapter.MyViewHolder>(), Filterable {
 
     private var productList: List<Product> = listOf()
     private var productListFiltered: List<Product> = listOf()
 
-    class MyViewHolder(
-        private val binding: ProductItemBinding,
-        private val btnUpdateClick: BtnUpdateClickInterface,
-        private val btnDeleteClick: BtnDeleteClickInterface
-    ) : ViewHolder(binding.root) {
+    class MyViewHolder(private val binding: ProductItemSearchBinding) : ViewHolder(binding.root) {
+
         private lateinit var myProduct: Product
+
         fun setData(product: Product) {
             myProduct = product
             binding.productName.text = product.name
             binding.productPrice.text = product.price.toString()
-            binding.btnUpdate.setOnClickListener { btnUpdateClick.onUpdateClick(it, product) }
-            binding.btnDelete.setOnClickListener { btnDeleteClick.onDeleteClick(it, product) }
         }
     }
 
@@ -41,15 +34,18 @@ class ProductsRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ProductItemBinding.inflate(inflater, parent, false)
-        return MyViewHolder(binding, btnUpdateClick, btnDeleteClick)
+        val binding = ProductItemSearchBinding.inflate(inflater, parent, false)
+        return MyViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
         return productListFiltered.size
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: MyViewHolder,
+        position: Int
+    ) {
         holder.setData(productListFiltered[position])
     }
 

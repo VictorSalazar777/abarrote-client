@@ -9,7 +9,7 @@
         android:id="@+id/searchProductsFragment"
         android:name="com.manuelsoft.app.SearchProductsFragment"
         android:label="SearchProductsFragment"
-        tools:layout="@layout/search_products">
+        tools:layout="@layout/search_products_fragment">
 
         <action
             android:id="@+id/action_searchProductsFragment_to_crudProductsFragment"
@@ -18,9 +18,9 @@
 
     <fragment
         android:id="@+id/crudProductsFragment"
-        android:name="com.manuelsoft.app.CrudProductsFragment"
+        android:name="com.manuelsoft.app.ManageProductsFragment"
         android:label="CrudProductsFragment"
-        tools:layout="@layout/crud_products">
+        tools:layout="@layout/manage_products_fragment">
 
         <action
             android:id="@+id/action_crudProductsFragment_to_updateDialogFragment"

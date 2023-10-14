@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.manuelsoft.app"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.manuelsoft.app"
@@ -46,14 +46,15 @@ android {
 dependencies {
 
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.activity:activity-ktx:1.7.2")
+    implementation("androidx.activity:activity-ktx:1.8.0")
     implementation("androidx.fragment:fragment-ktx:1.6.1")
     implementation("androidx.recyclerview:recyclerview:1.3.1")
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-compiler:2.48")
-    val nav_version = "2.5.3"
+    val nav_version = "2.7.4"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    implementation("com.google.android.material:material:1.10.0")
     implementation(project(path = ":repository"))
 
     testImplementation("junit:junit:4.13.2")

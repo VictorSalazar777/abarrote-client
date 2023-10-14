@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">app</string>
+    <string name="update_option">Modificar</string>
+    <string name="delete_option">Eliminar</string>
 </resources>

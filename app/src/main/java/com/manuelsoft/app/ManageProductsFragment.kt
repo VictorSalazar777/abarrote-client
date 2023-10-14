@@ -18,29 +18,30 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.manuelsoft.app.databinding.CrudProductsBinding
+import com.manuelsoft.app.databinding.ManageProductsFragmentBinding
 import com.manuelsoft.repository.Product
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CrudProductsFragment : BaseFragment<CrudProductsBinding>(), BtnUpdateClickInterface,
+class ManageProductsFragment : BaseFragment<ManageProductsFragmentBinding>(),
+    BtnUpdateClickInterface,
     BtnDeleteClickInterface {
 
-    override val inflate: (LayoutInflater, ViewGroup?, Boolean) -> CrudProductsBinding
-        get() = CrudProductsBinding::inflate
+    override val inflate: (LayoutInflater, ViewGroup?, Boolean) -> ManageProductsFragmentBinding
+        get() = ManageProductsFragmentBinding::inflate
 
     private val crudProductsViewModel: CrudProductsViewModel by activityViewModels()
 
-    private lateinit var adapter: ProductsRecyclerViewAdapter
+    private lateinit var adapter: ManageProductsRecyclerViewAdapter
     private var etProductNameCurrentText: CharSequence? = null
     private var priceOk = false
     private var nameOk = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = ProductsRecyclerViewAdapter(this, this)
+        adapter = ManageProductsRecyclerViewAdapter(this, this)
 
     }
 
@@ -148,7 +149,7 @@ class CrudProductsFragment : BaseFragment<CrudProductsBinding>(), BtnUpdateClick
 
 
     private fun setupAddButton() {
-        binding.btnAdd.setOnClickListener { it ->
+        binding.btnAdd.setOnClickListener {
             crudProductsViewModel.addProduct(
                 Product(
                     0,
@@ -175,7 +176,7 @@ class CrudProductsFragment : BaseFragment<CrudProductsBinding>(), BtnUpdateClick
         observeResultFlow()
     }
 
-    override fun onUpdateClick(view: View, product: Product) {
+    override fun onUpdateClick(product: Product, view: View?) {
 
         val bundle = bundleOf(
             "id" to product.id,
@@ -189,7 +190,7 @@ class CrudProductsFragment : BaseFragment<CrudProductsBinding>(), BtnUpdateClick
         )
     }
 
-    override fun onDeleteClick(view: View, product: Product) {
+    override fun onDeleteClick(product: Product, view: View?) {
         crudProductsViewModel.deleteProduct(product)
         binding.etProductname.text.clear()
         binding.etProductprice.text.clear()

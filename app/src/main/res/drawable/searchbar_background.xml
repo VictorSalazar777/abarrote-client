@@ -4,7 +4,6 @@
     <!-- Bordes curvos -->
     <item android:right="10dp" android:left="10dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/teal_200" />
             <corners android:radius="20dp" /> <!-- Ajusta el radio según tu preferencia -->
         </shape>
     </item>

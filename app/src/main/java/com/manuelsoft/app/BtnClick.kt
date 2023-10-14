@@ -4,9 +4,9 @@ import android.view.View
 import com.manuelsoft.repository.Product
 
 interface BtnUpdateClickInterface {
-    fun onUpdateClick(view: View, product: Product)
+    fun onUpdateClick(product: Product, view: View? = null)
 }
 
 interface BtnDeleteClickInterface {
-    fun onDeleteClick(view: View, product: Product)
+    fun onDeleteClick(product: Product, view: View? = null)
 }

@@ -9,7 +9,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
@@ -20,32 +19,35 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
-import com.manuelsoft.app.databinding.SearchProductsBinding
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.manuelsoft.app.databinding.SearchProductsFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SearchProductsFragment() :
-    BaseFragment<SearchProductsBinding>() {
+class SearchProductsFragment :
+    BaseFragment<SearchProductsFragmentBinding>() {
 
-    override val inflate: (LayoutInflater, ViewGroup?, Boolean) -> SearchProductsBinding
-        get() = SearchProductsBinding::inflate
+    override val inflate: (LayoutInflater, ViewGroup?, Boolean) -> SearchProductsFragmentBinding
+        get() = SearchProductsFragmentBinding::inflate
 
 
     private val crudProductsViewModel: CrudProductsViewModel by activityViewModels()
 
-    private lateinit var listAdapter: ArrayAdapter<String>
+    private lateinit var adapter: SearchProductsRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val products = mutableListOf<String>()
-        listAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, products)
+        adapter = SearchProductsRecyclerViewAdapter()
 
     }
 
     private fun setupProductsList() {
-        binding.productsList.adapter = listAdapter
+        binding.productsList.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        binding.productsList.adapter = adapter
         observeProductListSource()
     }
 
@@ -53,10 +55,7 @@ class SearchProductsFragment() :
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 crudProductsViewModel.productListFlow().collectLatest { productList ->
-                    listAdapter.clear()
-                    listAdapter.addAll(productList.map { product ->
-                        product.name
-                    })
+                    adapter.setData(productList)
                 }
             }
         }
@@ -70,7 +69,7 @@ class SearchProductsFragment() :
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                listAdapter.filter.filter(s)
+                adapter.filter.filter(s)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -115,10 +114,6 @@ class SearchProductsFragment() :
             }
 
         }, viewLifecycleOwner, Lifecycle.State.STARTED)
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
 

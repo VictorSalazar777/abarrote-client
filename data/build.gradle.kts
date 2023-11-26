@@ -6,6 +6,7 @@ plugins {
     id("kotlin-kapt")
 }
 
+
 android {
     namespace = "com.manuelsoft.data"
     compileSdk = 34
@@ -23,20 +24,18 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     kapt {
         correctErrorTypes = true
     }
@@ -45,15 +44,15 @@ android {
 
 dependencies {
 
-    val room_version = "2.5.2"
+    val room_version = "2.6.0"
     ksp("androidx.room:room-compiler:$room_version")
     api("androidx.room:room-ktx:$room_version")
-    api("com.google.dagger:hilt-android:2.48")
-    kapt("com.google.dagger:hilt-compiler:2.48")
+    api("com.google.dagger:hilt-android:2.48.1")
+    kapt("com.google.dagger:hilt-compiler:2.48.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test:runner:1.5.2")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.48")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48.1")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.48.1")
 }

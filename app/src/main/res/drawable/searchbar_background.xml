@@ -5,6 +5,7 @@
     <item android:right="10dp" android:left="10dp">
         <shape android:shape="rectangle">
             <corners android:radius="20dp" /> <!-- Ajusta el radio según tu preferencia -->
+            <solid android:color="@color/material_on_primary_emphasis_medium"/>
         </shape>
     </item>
 

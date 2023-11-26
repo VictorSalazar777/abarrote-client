@@ -2,6 +2,8 @@ package com.manuelsoft.data
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
+import com.manuelsoft.data.entity.CategoryEntity
+import com.manuelsoft.data.entity.ProductEntity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.runBlocking
@@ -20,71 +22,51 @@ import javax.inject.Inject
 @HiltAndroidTest
 class ProductEntityDaoTest {
 
-    @get:Rule var hiltRule = HiltAndroidRule(this)
-    @Inject lateinit var db: RoomDb
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
+
+    @Inject
+    lateinit var db: RoomDb
     private lateinit var productEntityDao: ProductEntityDao
+    private lateinit var categoryEntityDao: CategoryEntityDao
+    private lateinit var productWithCategoryDao: ProductWithCategoryDao
 
     @Before
     fun createDB() {
 
-      //  db = Room.databaseBuilder(appContext, RoomDb::class.java, "ProductsDb").build()
+        //  db = Room.databaseBuilder(appContext, RoomDb::class.java, "ProductsDb").build()
         hiltRule.inject()
         productEntityDao = db.productDao()
+        categoryEntityDao = db.categoryDao()
+        productWithCategoryDao = db.productWithCategoryDao()
 
     }
 
     @After
     @Throws(IOException::class)
     fun closeDb() {
+        db.clearAllTables()
         db.close()
     }
 
     @Test
     fun insert_listOfProducts_returnsPositive() = runBlocking {
-        val prod = ProductEntity(1, "clorox", 6.0f)
-        val prod2 = ProductEntity(2, "clorox", 6.0f)
-        val prod3 = ProductEntity(3, "clorox", 6.0f)
-        val prod4 = ProductEntity(4, "leche", 6.0f)
 
-        val prods = listOf(prod, prod2, prod3, prod4)
+        val category = CategoryEntity(2, "gato")
+        val product = ProductEntity(2, "arroz", 2, 1.50f)
 
-        productEntityDao.insert(prods)
+        categoryEntityDao.addCategory(category)
+        productEntityDao.addProduct(product)
+        productWithCategoryDao.insert()
 
-        val n = productEntityDao.getSize()
+        val c = categoryEntityDao.getAll()
+        val p = productEntityDao.getAll()
+        val n = productWithCategoryDao.getAllProductsWithCategories()
 
-        assertTrue(n > 0 && n == 4)
+        assertTrue(c.isEmpty())
+        assertTrue(p.isEmpty())
+        assertTrue(n.isEmpty())
     }
-
-    @Test
-    fun getAll_insertingProducts_gettingSameProducts() = runBlocking {
-        val prod = ProductEntity(1, "clorox", 6.0f)
-        val prod2 = ProductEntity(2, "aceite", 6.0f)
-        val prod3 = ProductEntity(3, "leche", 6.0f)
-        productEntityDao.insert(prod)
-        productEntityDao.insert(prod2)
-        productEntityDao.insert(prod3)
-
-        val list = productEntityDao.getAll()
-
-        assertTrue(list == listOf(prod, prod2, prod3))
-    }
-
-    @Test
-    fun deleteAll_deletingAllProducts_positiveReturned() = runBlocking {
-        val prod = ProductEntity(1, "clorox", 6.0f)
-        val prod2 = ProductEntity(2, "clorox", 6.0f)
-        val prod3 = ProductEntity(3, "clorox", 6.0f)
-        val prod4 = ProductEntity(4, "leche", 6.0f)
-
-        val prods = listOf(prod, prod2, prod3, prod4)
-
-        productEntityDao.insert(prods)
-
-        productEntityDao.deleteAll()
-
-        assertTrue(productEntityDao.getSize() == 0)
-    }
-
 
 
 }

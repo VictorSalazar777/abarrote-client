@@ -1,22 +1,18 @@
 package com.manuelsoft.app.di
 
-import com.manuelsoft.app.CrudProductsUseCase
-import com.manuelsoft.repository.Repository
+import com.manuelsoft.domain_impl.di.UseCasesModule
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 
-@Module
+@Module(
+    includes = [
+        UseCasesModule::class
+    ]
+)
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Provides
-    @Singleton
-    fun provideCrudProductsUseCase(repository: Repository): CrudProductsUseCase {
-        return CrudProductsUseCase(repository)
-    }
 
 }

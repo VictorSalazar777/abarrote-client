@@ -2,16 +2,16 @@ package com.manuelsoft.data
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
+import androidx.room.Upsert
+import com.manuelsoft.data.entity.ProductEntity
 
 @Dao
 interface ProductEntityDao {
 
     @Query("SELECT * FROM products")
-    fun getAll(): Flow<List<ProductEntity>>
+    fun getAll(): List<ProductEntity>
 
     @Query("SELECT * FROM products WHERE id=:id")
     suspend fun getById(id: Int): ProductEntity?
@@ -19,11 +19,11 @@ interface ProductEntityDao {
     @Query("SELECT * FROM products WHERE name=:name")
     suspend fun getByName(name: String): ProductEntity?
 
-    @Insert
-    suspend fun insert(productEntity: ProductEntity): Long
+    @Upsert
+    suspend fun addProduct(productEntity: ProductEntity): Long
 
-    @Insert
-    suspend fun insert(productEntities: List<ProductEntity>): LongArray
+    @Upsert
+    suspend fun addProducts(productEntities: List<ProductEntity>): LongArray
 
     @Query("UPDATE products SET name=:name WHERE id=:id")
     suspend fun updateName(id: Int, name: String): Int

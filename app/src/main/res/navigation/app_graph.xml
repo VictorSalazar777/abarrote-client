@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/searchProductsFragment"
-        android:name="com.manuelsoft.app.SearchProductsFragment"
+        android:name="com.manuelsoft.app.showProducts.ShowProductsFragment"
         android:label="SearchProductsFragment"
         tools:layout="@layout/search_products_fragment">
 
@@ -18,18 +18,33 @@
 
     <fragment
         android:id="@+id/crudProductsFragment"
-        android:name="com.manuelsoft.app.ManageProductsFragment"
+        android:name="com.manuelsoft.app.manageProducts.ManageProductsFragment"
         android:label="CrudProductsFragment"
         tools:layout="@layout/manage_products_fragment">
 
         <action
             android:id="@+id/action_crudProductsFragment_to_updateDialogFragment"
-            app:destination="@id/updateDialogFragment" />
+            app:destination="@id/updateProductDialogFragment" />
+        <action
+            android:id="@+id/action_crudProductsFragment_to_addProductDialogFragment"
+            app:destination="@id/addProductDialogFragment" />
     </fragment>
 
     <dialog
-        android:id="@+id/updateDialogFragment"
-        android:name="com.manuelsoft.app.UpdateDialogFragment"
-        android:label="UpdateDialogFragment" />
+        android:id="@+id/updateProductDialogFragment"
+        android:name="com.manuelsoft.app.updateProduct.UpdateProductDialogFragment"
+        android:label="UpdateDialogFragment">
+        <argument
+            android:name="data"
+            app:argType="com.manuelsoft.app.CategoriesAndProduct" />
+    </dialog>
+    <dialog
+        android:id="@+id/addProductDialogFragment"
+        android:name="com.manuelsoft.app.addProduct.AddProductDialogFragment"
+        android:label="AddProductDialogFragment">
+        <argument
+            android:name="data"
+            app:argType="com.manuelsoft.app.Categories" />
+    </dialog>
 
 </navigation>

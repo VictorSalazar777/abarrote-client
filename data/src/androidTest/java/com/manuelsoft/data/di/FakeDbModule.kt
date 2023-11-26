@@ -22,7 +22,12 @@ object FakeDbModule {
     @Singleton
     fun provideFirebaseReference(): RoomDb {
         val appContext = ApplicationProvider.getApplicationContext<Context>()
-        return Room.inMemoryDatabaseBuilder(appContext, RoomDb::class.java).build()
+        //        return Room.inMemoryDatabaseBuilder(context, RoomDb::class.java).build()
+        return Room.databaseBuilder(
+            context = appContext,
+            klass = RoomDb::class.java,
+            name = "ProductsDb"
+        ).build()
     }
 
 }

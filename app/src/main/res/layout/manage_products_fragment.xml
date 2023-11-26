@@ -41,13 +41,12 @@
         android:layout_height="wrap_content"
         android:text="Agregar"
         android:layout_margin="15dp"
-        android:layout_gravity="end"
-        android:enabled="false" />
+        android:layout_gravity="end" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/products_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/product_item_manage_wider" />
+        tools:listitem="@layout/product_item_manage_narrower" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
